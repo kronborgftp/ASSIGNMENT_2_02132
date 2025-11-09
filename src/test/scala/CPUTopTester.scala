@@ -50,7 +50,8 @@ class CPUTopTester extends AnyFlatSpec with ChiselScalatestTester {
         //val program = Programs.program2
 
         //for testing purposes
-        val program = Programs.testProgram
+        //val program = Programs.testProgram
+        val program = Programs.erode_program
 
 
         for (address <- 0 to program.length - 1) {

@@ -1,0 +1,7 @@
+[0m[[0m[31merror[0m] [0m[0m/home/augersen/chisel/ASSIGNMENT_2_02132/src/test/scala/Programs.scala:48:3: ')' expected but string literal found.[0m
+[0m[[0m[31merror[0m] [0m[0m  "b01110001000011111111000000000000".U(32.W)[0m
+[0m[[0m[31merror[0m] [0m[0m  ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/augersen/chisel/ASSIGNMENT_2_02132/src/test/scala/Programs.scala:49:3: ';' expected but string literal found.[0m
+[0m[[0m[31merror[0m] [0m[0m  "b01111111000010010001000000000000".U(32.W)[0m
+[0m[[0m[31merror[0m] [0m[0m  ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m

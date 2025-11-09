@@ -5,7 +5,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 /*
  * To run:
  *   sbt "testOnly RegisterFileTester"
- *  output:
+ * output:
  *  /test_run_dir/RegisterFileTester/RegisterFile.vcd
  */
 
