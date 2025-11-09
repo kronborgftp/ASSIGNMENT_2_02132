@@ -17,11 +17,18 @@ class CPUTopTester extends AnyFlatSpec with ChiselScalatestTester {
 
         //Load the data memory with image data
         System.out.print("\nLoading the data memory with image data... ")
+
+        /**
+         * INSERT TEST IMAGE OR JUST UNCOMMENT
+         */
         //Uncomment one of the following line depending on the image you want to load to the data memory
         //var image = Images.blackImage
         //var image = Images.whiteImage
-        var image = Images.cellsImage
         //var image = Images.borderCellsImage
+
+          //for testing purposes
+        var image = Images.cpuTestData
+
         for (address <- 0 to image.length - 1) {
           dut.io.testerDataMemEnable.poke(true.B)
           dut.io.testerDataMemWriteEnable.poke(true.B)
@@ -35,8 +42,17 @@ class CPUTopTester extends AnyFlatSpec with ChiselScalatestTester {
         //Load the program memory with instructions
         System.out.print("\nLoading the program memory with instructions... ")
         //Uncomment one of the following line depending on the program you want to load to the program memory
-        val program = Programs.program1
+        /**
+         * INSERT PROGRAM TO TEST HERE
+         */
+
+        //val program = Programs.program1
         //val program = Programs.program2
+
+        //for testing purposes
+        val program = Programs.testProgram
+
+
         for (address <- 0 to program.length - 1) {
           dut.io.testerProgMemEnable.poke(true.B)
           dut.io.testerProgMemWriteEnable.poke(true.B)

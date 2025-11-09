@@ -116,4 +116,11 @@ object Images{
     System.out.print("\r\n")
   }
 
+  //TEST IMAGE!!!!!!
+  val cpuTestData = Array(
+    10, 0, 0, 0, 0, 0, 0, 0, 0, 0, // first 10 values
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0   // 20 total entries, rest are 0
+  )
+
+
 }

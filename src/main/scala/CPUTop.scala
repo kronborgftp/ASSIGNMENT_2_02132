@@ -28,12 +28,54 @@ class CPUTop extends Module {
   val alu = Module(new ALU())
 
   //Connecting the modules
-  //programCounter.io.run := io.run
-  //programMemory.io.address := programCounter.io.programCounter
+  programCounter.io.run := io.run
+  programMemory.io.address := programCounter.io.programCounter
 
   ////////////////////////////////////////////
   //Continue here with your connections
   ////////////////////////////////////////////
+
+  //fetch
+  // meaning program counter provides address to program memory
+  // sends fetched instruction from program memory to control unit
+  controlUnit.io.instr := programMemory.io.instructionRead(15, 0)
+
+  //decode and execution
+  // register file selector connections from control unit
+  registerFile.io.aSel := controlUnit.io.rsSel
+  registerFile.io.bSel := controlUnit.io.rtSel
+
+  //ALU inputs from register file outputs
+  alu.io.a := registerFile.io.a
+  alu.io.b := registerFile.io.b
+
+  //ALU operation selector
+  alu.io.sel := controlUnit.io.aluSel
+
+  //memory
+  //ALU results  used as  address for DataMemory
+  // load and store instructions
+  dataMemory.io.address := alu.io.out
+  dataMemory.io.dataWrite := registerFile.io.b
+  dataMemory.io.writeEnable := controlUnit.io.memWrite
+
+  //write back
+  // chooses whether to write ALU result or memory output back to registers
+  val writeBackData = Wire(UInt(16.W))
+  writeBackData := Mux(controlUnit.io.useMemData, dataMemory.io.dataRead(15, 0), alu.io.out)
+
+  registerFile.io.writeEnable := controlUnit.io.regWrite
+  registerFile.io.writeSel := controlUnit.io.rdSel
+  registerFile.io.writeData := writeBackData
+
+  // program counter
+  programCounter.io.run := io.run
+  programCounter.io.stop := controlUnit.io.pcStop
+  programCounter.io.jump := controlUnit.io.pcJump
+  programCounter.io.programCounterJump := registerFile.io.a  // jump target from register (or immediate if extended)
+
+  // done signal
+  io.done := controlUnit.io.pcStop
 
   //This signals are used by the tester for loading the program to the program memory, do not touch
   programMemory.io.testerAddress := io.testerProgMemAddress
