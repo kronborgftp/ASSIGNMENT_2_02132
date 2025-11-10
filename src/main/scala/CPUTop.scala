@@ -61,18 +61,34 @@ class CPUTop extends Module {
 
   //write back
   // chooses whether to write ALU result or memory output back to registers
+
+  // for LI
+  val immediate = controlUnit.io.instr(7,0)
+
+  // zero-extend the 8-bit immediate to 16 bits by adding 8 zeros in front.
+  // ensures it fits in 16bit
+  val extendedImm = Cat(0.U(8.W), immediate)
+
+  // temp 16-bit wire to hold whichever value we will write back to the register file.
   val writeBackData = Wire(UInt(16.W))
-  writeBackData := Mux(controlUnit.io.useMemData, dataMemory.io.dataRead(15, 0), alu.io.out)
+
+  // MUX
+  // default -> ALU result
+  // if useMemData = true  -> take data from memory (LD)
+  // if useImmediate = true -> take the immediate constant (LI)
+  writeBackData := MuxCase(alu.io.out, Seq(
+    controlUnit.io.useMemData -> dataMemory.io.dataRead(15, 0),
+    controlUnit.io.useImmediate -> extendedImm
+  ))
 
   registerFile.io.writeEnable := controlUnit.io.regWrite
   registerFile.io.writeSel := controlUnit.io.rdSel
   registerFile.io.writeData := writeBackData
 
   // program counter
-  programCounter.io.run := io.run
   programCounter.io.stop := controlUnit.io.pcStop
   programCounter.io.jump := controlUnit.io.pcJump
-  programCounter.io.programCounterJump := registerFile.io.a  // jump target from register (or immediate if extended)
+  programCounter.io.programCounterJump := registerFile.io.a
 
   // done signal
   io.done := controlUnit.io.pcStop

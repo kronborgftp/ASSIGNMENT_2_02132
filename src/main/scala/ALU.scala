@@ -19,7 +19,7 @@ class ALU extends Module {
   //Implement this module here
 
   /*
-   *  from ISA and OPCode thanks to MakeMyCakeSteak and Lars RewAir:
+   *  from ISA and OPCode
    *   0000 -> ADD   : a + b
    *   0001 -> SUB   : a - b
    *   0010 -> OR    : a | b
@@ -70,7 +70,7 @@ class ALU extends Module {
   /*
    * Output:
    *   - out  : the 16-bit result of the operation
-   *   - zero : true if the result == 0, false otherwise, WILL BE USED FOR BRANCHING (i think)
+   *   - zero : true if the result == 0, false otherwise, branching
    */
 
   // assign the computed value to the output port

@@ -24,6 +24,7 @@ class ControlUnit extends Module {
     // memory
     val memWrite = Output(Bool())
     val useMemData = Output(Bool()) // 1 => write back data from memory (LD)
+    val useImmediate = Output(Bool()) // 1 => write back immediate constant (LI)
 
     // program counter
     val pcJump = Output(Bool())
@@ -45,30 +46,33 @@ class ControlUnit extends Module {
   io.aluSel := 0.U
   io.memWrite := false.B
   io.useMemData := false.B
+  io.useImmediate := false.B
   io.pcJump := false.B
   io.pcStop := false.B
 
   //  main decode
   switch(opcode) {
-    is("b0000".U) { // ADD
+    is("b0000".U) { } // NOP
+
+    is("b0001".U) { // ADD
       io.aluSel := "b0000".U; io.regWrite := true.B
     }
-    is("b0001".U) { // SUB
+    is("b0010".U) { // SUB
       io.aluSel := "b0001".U; io.regWrite := true.B
     }
-    is("b0010".U) { // OR
+    is("b0011".U) { // OR
       io.aluSel := "b0010".U; io.regWrite := true.B
     }
-    is("b0011".U) { // AND
+    is("b0100".U) { // AND
       io.aluSel := "b0011".U; io.regWrite := true.B
     }
-    is("b0100".U) { // NOT
+    is("b0101".U) { // NOT
       io.aluSel := "b0100".U; io.regWrite := true.B
     }
-    is("b0101".U) { // GT
+    is("b0110".U) { // GT
       io.aluSel := "b0101".U; io.regWrite := true.B
     }
-    is("b0110".U) { // MOD
+    is("b0111".U) { // MOD
       io.aluSel := "b0110".U; io.regWrite := true.B
     }
 
@@ -77,16 +81,17 @@ class ControlUnit extends Module {
       io.useMemData := true.B
       io.regWrite := true.B
     }
-    is("b1001".U) { // SD  mem(rd) = rs
+    is("b1001".U) { // LI  rd = immediate
+      io.useImmediate := true.B
+      io.regWrite := true.B
+    }
+    is("b1010".U) { // SD  mem(rd) = rs
       io.memWrite := true.B
     }
 
     // control
-    is("b1010".U) { // GO rd = address, rs = condition
+    is("b1011".U) { // GO rd = address, rs = condition
       io.pcJump := true.B // PC jump will be conditioned in top-level
-    }
-    is("b1110".U) { // NOP
-      // do nothing
     }
     is("b1111".U) { // STOP
       io.pcStop := true.B
