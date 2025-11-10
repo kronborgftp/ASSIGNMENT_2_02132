@@ -85,7 +85,7 @@ class ControlUnit extends Module {
       io.useImmediate := true.B
       io.regWrite := true.B
     }
-    is("b1010".U) { // SD  mem(rd) = rs
+    is("b1010".U) { // SD mem(rs) = rd
       io.memWrite := true.B
     }
 

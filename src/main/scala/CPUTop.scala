@@ -55,8 +55,21 @@ class CPUTop extends Module {
   //memory
   //ALU results  used as  address for DataMemory
   // load and store instructions
-  dataMemory.io.address := alu.io.out
-  dataMemory.io.dataWrite := registerFile.io.b
+  // MEMORY STAGE
+  // For LD and SD, ALU result provides the effective address.
+  // For SD: mem[rs] = rd
+  // For LD: rd = mem[rs]
+
+  when (controlUnit.io.memWrite) {
+    // For SD — address = value in rd, data = value in rs
+    dataMemory.io.address := registerFile.io.a  // aSel will be rdSel
+    dataMemory.io.dataWrite := registerFile.io.b  // bSel will be rsSel
+  } .otherwise {
+    // For LD and all other instructions — address = ALU output
+    dataMemory.io.address := alu.io.out
+    dataMemory.io.dataWrite := registerFile.io.b
+  }
+
   dataMemory.io.writeEnable := controlUnit.io.memWrite
 
   //write back
@@ -136,6 +149,9 @@ class CPUTop extends Module {
     } .otherwise {
       // ALU result was used
       printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=ALU\n")
+    }
+    when (controlUnit.io.memWrite) {
+      printf(p"[SD] A=${alu.io.a} B=${alu.io.b} Addr=${alu.io.out} Data=${registerFile.io.b}\n")
     }
   }
 
