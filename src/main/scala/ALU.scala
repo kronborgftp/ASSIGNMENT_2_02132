@@ -31,35 +31,35 @@ class ALU extends Module {
 
   switch(io.sel) {
 
-    is("b0000".U) {        // ADD
+    is("b0001".U) {        // ADD
       result := io.a + io.b
     }
 
-    is("b0001".U) {        // SUB
+    is("b0010".U) {        // SUB
       result := io.a - io.b
     }
 
-    is("b0010".U) {        // OR
+    is("b0011".U) {        // OR
       result := io.a | io.b
     }
 
-    is("b0011".U) {        // AND
+    is("b0100".U) {        // AND
       result := io.a & io.b
     }
 
-    is("b0100".U) {        // NOT (bitwise negation)
+    is("b0101".U) {        // NOT (bitwise negation)
       // Only uses 'a' - the value of 'b' is ignored.
       // ~ inverts in chisel (flips every bit in the register)
       result := ~io.a
     }
 
-    is("b0101".U) {        // GREATER THAN
+    is("b0110".U) {        // GREATER THAN
       // If a > b, output 1; else, output 0
       // using Mux is the equivalent of if-else expression (kinda), Mux(condition, whenTrue, whenFalse)
       result := Mux(io.a > io.b, 1.U(16.W), 0.U(16.W))
     }
 
-    is("b0110".U) {        // MODULO
+    is("b0111".U) {        // MODULO
       // Compute a % b, but avoid division-by-zero errors.....
       // =/= is the not equal operator
       result := Mux(io.b =/= 0.U, io.a % io.b, 0.U)

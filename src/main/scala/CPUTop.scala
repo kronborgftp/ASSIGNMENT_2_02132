@@ -105,4 +105,39 @@ class CPUTop extends Module {
   dataMemory.io.testerDataWrite := io.testerDataMemDataWrite
   dataMemory.io.testerEnable := io.testerDataMemEnable
   dataMemory.io.testerWriteEnable := io.testerDataMemWriteEnable
+
+  ////////////////////////////////////////////
+  // Debug instrumentation (fixed)
+  ////////////////////////////////////////////
+
+  // simple cycle counter
+  val cycle = RegInit(0.U(32.W))
+  cycle := cycle + 1.U
+
+  // prepare values to show
+  val instr16 = controlUnit.io.instr               // 16-bit view
+  val pc = programCounter.io.programCounter
+  val aluOut = alu.io.out
+  val wsel = controlUnit.io.rdSel
+  val regWr = controlUnit.io.regWrite
+  val regWriteData = registerFile.io.writeData
+  val memData = dataMemory.io.dataRead(15,0)
+  val imm8 = controlUnit.io.instr(7,0)
+  val immExt = Cat(0.U(8.W), imm8)                  // same as extendedImm
+
+  when (io.run && !io.done) {
+    // default: ALU (no immediate, no mem)
+    when (controlUnit.io.useMemData) {
+      // memory was used for writeback
+      printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=MEM MemData=${memData}\n")
+    } .elsewhen (controlUnit.io.useImmediate) {
+      // immediate was used for writeback
+      printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=IMM Imm=${immExt}\n")
+    } .otherwise {
+      // ALU result was used
+      printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=ALU\n")
+    }
+  }
+
+
 }

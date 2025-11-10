@@ -1,28 +1,11 @@
 [0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = /home/augersen/chisel/ASSIGNMENT_2_02132/target/scala-2.13/test-classes.bak[0m
 [0m[[0m[0mdebug[0m] [0m[0mAbout to delete class files:[0m
-[0m[[0m[0mdebug[0m] [0m[0m	HelloTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Images.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	Programs.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	ProgramCounterTester.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	Programs$.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	CPUTopTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Images$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0mWe backup class files:[0m
-[0m[[0m[0mdebug[0m] [0m[0m	HelloTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Images.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	Programs.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	ProgramCounterTester.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	Programs$.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	CPUTopTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Images$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0mRegistering generated classes:[0m
-[0m[[0m[0mdebug[0m] [0m[0m	ALUTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	HelloTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Images.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	Programs.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	ProgramCounterTester.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	Programs$.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	CPUTopTester.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	Images$.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	RegisterFileTester.class[0m
 [0m[[0m[0mdebug[0m] [0m[0mRemoving the temporary directory used for backing up class files: /home/augersen/chisel/ASSIGNMENT_2_02132/target/scala-2.13/test-classes.bak[0m

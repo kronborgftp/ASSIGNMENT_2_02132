@@ -55,25 +55,25 @@ class ControlUnit extends Module {
     is("b0000".U) { } // NOP
 
     is("b0001".U) { // ADD
-      io.aluSel := "b0000".U; io.regWrite := true.B
-    }
-    is("b0010".U) { // SUB
       io.aluSel := "b0001".U; io.regWrite := true.B
     }
-    is("b0011".U) { // OR
+    is("b0010".U) { // SUB
       io.aluSel := "b0010".U; io.regWrite := true.B
     }
-    is("b0100".U) { // AND
+    is("b0011".U) { // OR
       io.aluSel := "b0011".U; io.regWrite := true.B
     }
-    is("b0101".U) { // NOT
+    is("b0100".U) { // AND
       io.aluSel := "b0100".U; io.regWrite := true.B
     }
-    is("b0110".U) { // GT
+    is("b0101".U) { // NOT
       io.aluSel := "b0101".U; io.regWrite := true.B
     }
-    is("b0111".U) { // MOD
+    is("b0110".U) { // GT
       io.aluSel := "b0110".U; io.regWrite := true.B
+    }
+    is("b0111".U) { // MOD
+      io.aluSel := "b0111".U; io.regWrite := true.B
     }
 
     // memory operations
@@ -94,7 +94,9 @@ class ControlUnit extends Module {
       io.pcJump := true.B // PC jump will be conditioned in top-level
     }
     is("b1111".U) { // STOP
-      io.pcStop := true.B
+      when (io.instr === "hFFFF".U) {
+        io.pcStop := true.B
+      }
     }
   }
 }
