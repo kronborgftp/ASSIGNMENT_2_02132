@@ -77,22 +77,28 @@ class ControlUnit extends Module {
     }
 
     // memory operations
-    is("b1000".U) { // LD  rd = mem(rs)
+    is("b1000".U) { // LD rd = mem(rs)
       io.useMemData := true.B
       io.regWrite := true.B
+      io.rtSel := rd // destination — not really used for reading
     }
+
     is("b1001".U) { // LI  rd = immediate
       io.useImmediate := true.B
       io.regWrite := true.B
     }
-    is("b1010".U) { // SD mem(rs) = rd
+    is("b1010".U) { // SD mem(rd) = rs
       io.memWrite := true.B
+      io.rsSel := rs // address (aSel)
+      io.rtSel := rd // data (bSel) - August changed this because it was storing address instead of info
     }
 
     // control
     is("b1011".U) { // GO rd = address, rs = condition
-      io.pcJump := true.B // PC jump will be conditioned in top-level
+      io.pcJump := true.B
+      io.rtSel := rd  // read condition from rd - August changed this because jump wasn't working properly.
     }
+
     is("b1111".U) { // STOP
       when (io.instr === "hFFFF".U) {
         io.pcStop := true.B

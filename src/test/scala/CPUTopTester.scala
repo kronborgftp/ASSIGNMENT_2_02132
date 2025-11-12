@@ -37,14 +37,6 @@ class CPUTopTester extends AnyFlatSpec with ChiselScalatestTester {
           dut.clock.step(1)
         }
 
-        for (address <- image.length to 2*image.length - 1) {
-          dut.io.testerDataMemEnable.poke(true.B)
-          dut.io.testerDataMemWriteEnable.poke(true.B)
-          dut.io.testerDataMemAddress.poke(address)
-          dut.io.testerDataMemDataWrite.poke(image(address-image.length))
-          dut.clock.step(1)
-        }
-
 
         dut.io.testerDataMemEnable.poke(false.B)
         System.out.println("Done!")

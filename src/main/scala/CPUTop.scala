@@ -61,14 +61,19 @@ class CPUTop extends Module {
   // For LD: rd = mem[rs]
 
   when (controlUnit.io.memWrite) {
-    // For SD — address = value in rd, data = value in rs
-    dataMemory.io.address := registerFile.io.a  // aSel will be rdSel
-    dataMemory.io.dataWrite := registerFile.io.b  // bSel will be rsSel
+    // SD (store): address = value in rd, data = value in rs
+    dataMemory.io.address := registerFile.io.a   // aSel = rdSel
+    dataMemory.io.dataWrite := registerFile.io.b // bSel = rsSel
+  } .elsewhen (controlUnit.io.useMemData) {
+    // LD (load): address = value in rs
+    dataMemory.io.address := registerFile.io.a   // aSel = rsSel
+    dataMemory.io.dataWrite := 0.U               // not used for load
   } .otherwise {
-    // For LD and all other instructions — address = ALU output
+    // All other instructions: use ALU output
     dataMemory.io.address := alu.io.out
     dataMemory.io.dataWrite := registerFile.io.b
   }
+
 
   dataMemory.io.writeEnable := controlUnit.io.memWrite
 
@@ -100,7 +105,8 @@ class CPUTop extends Module {
 
   // program counter
   programCounter.io.stop := controlUnit.io.pcStop
-  programCounter.io.jump := controlUnit.io.pcJump
+  // Conditional jump: only jump if rs (register b) != 0
+  programCounter.io.jump := controlUnit.io.pcJump && (registerFile.io.b =/= 0.U)
   programCounter.io.programCounterJump := registerFile.io.a
 
   // done signal
@@ -153,7 +159,12 @@ class CPUTop extends Module {
     when (controlUnit.io.memWrite) {
       printf(p"[SD] A=${alu.io.a} B=${alu.io.b} Addr=${alu.io.out} Data=${registerFile.io.b}\n")
     }
-  }
+    when (registerFile.io.writeEnable) {
+      printf(p"[WRITEBACK] cycle=$cycle PC=${programCounter.io.programCounter} writeSel=${registerFile.io.writeSel} writeData=${registerFile.io.writeData}\n")
+    }
+    when (controlUnit.io.memWrite) {
+      printf(p"[STORE] cycle=$cycle A=${registerFile.io.a} B=${registerFile.io.b} Addr=${dataMemory.io.address} Data=${dataMemory.io.dataWrite}\n")
+  }}
 
 
 }
