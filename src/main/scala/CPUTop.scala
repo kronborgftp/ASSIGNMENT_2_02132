@@ -145,26 +145,6 @@ class CPUTop extends Module {
   val immExt = Cat(0.U(8.W), imm8)                  // same as extendedImm
 
   when (io.run && !io.done) {
-    // default: ALU (no immediate, no mem)
-    when (controlUnit.io.useMemData) {
-      // memory was used for writeback
-      printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=MEM MemData=${memData}\n")
-    } .elsewhen (controlUnit.io.useImmediate) {
-      // immediate was used for writeback
-      printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=IMM Imm=${immExt}\n")
-    } .otherwise {
-      // ALU result was used
-      printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)} ALUout=${aluOut} RegWrite=${regWr} WriteSel=${wsel} WriteData=${regWriteData} Src=ALU\n")
-    }
-    when (controlUnit.io.memWrite) {
-      printf(p"[SD] A=${alu.io.a} B=${alu.io.b} Addr=${alu.io.out} Data=${registerFile.io.b}\n")
-    }
-    when (registerFile.io.writeEnable) {
-      printf(p"[WRITEBACK] cycle=$cycle PC=${programCounter.io.programCounter} writeSel=${registerFile.io.writeSel} writeData=${registerFile.io.writeData}\n")
-    }
-    when (controlUnit.io.memWrite) {
-      printf(p"[STORE] cycle=$cycle A=${registerFile.io.a} B=${registerFile.io.b} Addr=${dataMemory.io.address} Data=${dataMemory.io.dataWrite}\n")
-  }}
-
-
+    printf(p"[Cycle $cycle] PC=${pc} Instr=${Binary(instr16)}\n")
+  }
 }

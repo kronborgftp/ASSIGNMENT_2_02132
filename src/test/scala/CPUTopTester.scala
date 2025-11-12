@@ -27,7 +27,7 @@ class CPUTopTester extends AnyFlatSpec with ChiselScalatestTester {
         //var image = Images.borderCellsImage
 
           //for testing purposes
-        var image = Images.cellsImage
+        var image = Images.whiteImage
 
         for (address <- 0 to image.length - 1) {
           dut.io.testerDataMemEnable.poke(true.B)
@@ -53,8 +53,11 @@ class CPUTopTester extends AnyFlatSpec with ChiselScalatestTester {
 
         //for testing purposes
         //val program = Programs.testProgram
-        val program = Programs.erode
 
+        // Working programs
+        // val program = Programs.erode // 5308 cycles
+        // val program = Programs.short_erode //  2825 cycles - NOPs er for tryhards tbh
+        val program = Programs.erode
 
         for (address <- 0 to program.length - 1) {
           dut.io.testerProgMemEnable.poke(true.B)
